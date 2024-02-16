@@ -1,0 +1,31 @@
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.black]
+line-length = 120
+
+
+[tool.poetry]
+name = "waklife-manager"
+version = "0.1.0"
+description = ""
+authors = ["Minsu Kim <minsu.kim@hanarin.uk>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+black = "^24.2.0"
+isort = "^5.13.2"
+discord-py = "^2.3.2"
+jishaku = "^2.5.2"
+python-dotenv = "^1.0.1"
+synology-api = "^0.6.3"
+gspread = "^6.0.2"
+pillow = "^10.2.0"
+google-api-python-client = "^2.118.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
