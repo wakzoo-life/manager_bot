@@ -3,6 +3,9 @@ isort==5.13.2
 discord.py==2.3.2
 jishaku==2.5.2
 python-dotenv==1.0.1
+olefile==0.47
+defusedxml==0.7.1
+pillow==10.2.0
 synology_api==0.6.3
 gspread==6.0.2
 google-api-python-client==2.118.0
