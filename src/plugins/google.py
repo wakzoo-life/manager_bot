@@ -1,4 +1,6 @@
 import os
+import json
+import base64
 
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import Resource, build
@@ -7,8 +9,8 @@ from gspread import Client, Worksheet, authorize
 
 class GoogleUtil:
     def __init__(self):
-        self._credentials = Credentials.from_service_account_file(
-            os.path.join("config", "credentials.json"),
+        self._credentials = Credentials.from_service_account_info(
+            json.loads(base64.b64decode(os.getenv("GOOGLE_CREDENTIALS"))),
             scopes=["https://www.googleapis.com/auth/spreadsheets"],
         )
 

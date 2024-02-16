@@ -14,7 +14,9 @@ bot.remove_command("help")
 async def load_extensions():
     print("------------------------------------")
 
-    for file in os.listdir("cogs"):
+    directory_prefix = "." if os.path.exists("cogs") else "src"
+
+    for file in os.listdir(os.path.join(directory_prefix, "cogs")):
         if file.endswith(".py"):
             try:
                 await bot.load_extension(f"cogs.{file[:-3]}")
