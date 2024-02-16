@@ -7,8 +7,12 @@ class CmdManager(commands.Cog, name="Command Manager"):
 
     @commands.command(name="sync", help="Sync all slash commands.")
     async def sync(self, ctx: commands.Context) -> None:
+        msg = await ctx.reply(f"🔌 Now syncing command with Discord...")
+        print(f"🔌 Now syncing command with Discord...")
+
         fmt = await ctx.bot.tree.sync()
-        await ctx.send(f"✅ Synced {len(fmt)} command(s).")
+        print(f"✅ Synced {len(fmt)} command(s).")
+        await msg.edit(content=f"✅ Synced {len(fmt)} command(s).")
 
 
 async def setup(bot: commands.Bot):

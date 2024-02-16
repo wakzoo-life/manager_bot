@@ -18,13 +18,11 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.nasStation = filestation.FileStation(
-            # "192.168.0.135",
-            "nas.wakzoo.life",
-            # "5000",
-            "443",
+            "192.168.0.135" if os.getenv("MODE") == "PRODUCTION" else "nas.wakzoo.life",
+            "5000" if os.getenv("MODE") == "PRODUCTION" else "443",
             "manager",
             "4UwROwe5havL4eTO",
-            secure=True,
+            secure=os.getenv("MODE") != "PRODUCTION",
             cert_verify=False,
             dsm_version=7,
             debug=True,
