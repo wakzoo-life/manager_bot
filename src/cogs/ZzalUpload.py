@@ -118,7 +118,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
                         uploaded.append(
                             {
                                 "range": "B" + str(row + 2),
-                                "values": [paths],
+                                "values": [[",".join(paths)]],
                             }
                         )
                     else:
@@ -248,7 +248,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
                         uploaded.append(
                             {
                                 "range": "D" + str(row + 2),
-                                "values": [paths],
+                                "values": [[",".join(paths)]],
                             }
                         )
                     else:
