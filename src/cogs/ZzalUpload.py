@@ -65,6 +65,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
                         filename.endswith(".webp")
                         or filename.endswith(".gif")
                         or filename.endswith(".jpg")
+                        or filename.endswith(".jpeg")
                         or filename.endswith(".png")
                     ):
                         await interaction.edit_original_response(
@@ -131,8 +132,10 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
                             errors.append(f":warning: {filename} : 업로드 중 문제가 발생했습니다.\n\n{uploadRes}")
 
                     os.remove(join("temp/", f"{message.author.id}_{filename}"))
-                    if filename.endswith(".jpg") or filename.endswith(".png"):
-                        os.remove(join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|png)$', '.webp', filename)}"))
+                    if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
+                        os.remove(
+                            join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}")
+                        )
 
                 if len(uploaded) > 0:
                     worksheet.batch_update(uploaded)
@@ -183,6 +186,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
                         filename.endswith(".webp")
                         or filename.endswith(".gif")
                         or filename.endswith(".jpg")
+                        or filename.endswith(".jpeg")
                         or filename.endswith(".png")
                     ):
                         await interaction.edit_original_response(
@@ -261,8 +265,10 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
                             errors.append(f":warning: {filename} : 업로드 중 문제가 발생했습니다.\n\n{uploadRes}")
 
                     os.remove(join("temp/", f"{message.author.id}_{filename}"))
-                    if filename.endswith(".jpg") or filename.endswith(".png"):
-                        os.remove(join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|png)$', '.webp', filename)}"))
+                    if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
+                        os.remove(
+                            join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}")
+                        )
 
                 if len(uploaded) > 0:
                     worksheet.batch_update(uploaded)
