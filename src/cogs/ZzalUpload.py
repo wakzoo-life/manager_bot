@@ -38,15 +38,19 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
 
     async def upload_zzal(self, interaction: Interaction, message: Message) -> None:
         if len(message.attachments) <= 0:
-            await interaction.response.send_message(":warning: 파일을 첨부한 뒤 업로드를 시도해 주세요.")
+            await interaction.response.send_message(
+                ":warning: 파일을 첨부한 뒤 업로드를 시도해 주세요.", ephemeral=True
+            )
         elif len(message.content) <= 0:
-            await interaction.response.send_message(":warning: 짤 이름을 입력한 뒤 업로드를 시도해 주세요.")
+            await interaction.response.send_message(
+                ":warning: 짤 이름을 입력한 뒤 업로드를 시도해 주세요.", ephemeral=True
+            )
         elif not message.content.startswith("name: "):
-            await interaction.response.send_message(":warning: 짤 이름은 `name: `으로 시작해야 합니다.")
+            await interaction.response.send_message(":warning: 짤 이름은 `name: `으로 시작해야 합니다.", ephemeral=True)
         elif "\n" in message.content:
-            await interaction.response.send_message(":warning: 짤 이름은 한 줄로 입력해 주세요.")
+            await interaction.response.send_message(":warning: 짤 이름은 한 줄로 입력해 주세요.", ephemeral=True)
         else:
-            await interaction.response.defer()
+            await interaction.response.defer(thinking=True)
 
             try:
                 worksheet = google_util.get_worksheet_by_index(
@@ -159,15 +163,21 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
 
     async def upload_time(self, interaction: Interaction, message: Message) -> None:
         if len(message.attachments) <= 0:
-            await interaction.response.send_message(":warning: 파일을 첨부한 뒤 업로드를 시도해 주세요.")
+            await interaction.response.send_message(
+                ":warning: 파일을 첨부한 뒤 업로드를 시도해 주세요.", ephemeral=True
+            )
         elif len(message.content) <= 0:
-            await interaction.response.send_message(":warning: 시간 이름을 입력한 뒤 업로드를 시도해 주세요.")
+            await interaction.response.send_message(
+                ":warning: 시간 이름을 입력한 뒤 업로드를 시도해 주세요.", ephemeral=True
+            )
         elif not message.content.startswith("time: "):
-            await interaction.response.send_message(":warning: 시간 이름은 `time: `으로 시작해야 합니다.")
+            await interaction.response.send_message(
+                ":warning: 시간 이름은 `time: `으로 시작해야 합니다.", ephemeral=True
+            )
         elif "\n" in message.content:
-            await interaction.response.send_message(":warning: 시간 이름은 한 줄로 입력해 주세요.")
+            await interaction.response.send_message(":warning: 시간 이름은 한 줄로 입력해 주세요.", ephemeral=True)
         else:
-            await interaction.response.defer()
+            await interaction.response.defer(thinking=True)
 
             try:
                 worksheet = google_util.get_worksheet_by_index(
