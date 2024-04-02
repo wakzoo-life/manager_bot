@@ -7,7 +7,7 @@ from googleapiclient.discovery import Resource, build
 from gspread import Client, Worksheet, authorize
 
 
-class GoogleUtil:
+class SheetPlugin:
     def __init__(self):
         self._credentials = Credentials.from_service_account_info(
             json.loads(base64.b64decode(os.getenv("GOOGLE_CREDENTIALS"))),
