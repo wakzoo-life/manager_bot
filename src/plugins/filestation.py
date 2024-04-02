@@ -12,7 +12,7 @@ def getSynologyHost() -> dict:
         "port": host.split("@")[1].split(":")[1],
         "username": host.split("//")[1].split(":")[0],
         "password": host.split("//")[1].split(":")[1].split("@")[0],
-        "secure": getenv("MODE") != "PRODUCTION",
+        "secure": getenv("MODE").upper() != "PRODUCTION",
         "cert_verify": False,
         "dsm_version": 7,
         "debug": True,
