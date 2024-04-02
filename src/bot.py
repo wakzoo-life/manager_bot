@@ -1,5 +1,6 @@
 import os
 import asyncio
+import traceback
 
 from discord import Game, Intents
 from discord.ext import commands
@@ -21,8 +22,8 @@ async def load_extensions():
             try:
                 await bot.load_extension(f"cogs.{file[:-3]}")
                 print(f"cogs.{file[:-3]} ({file}) ✅")
-            except Exception as e:
-                print(f"cogs.{file[:-3]} ({file}) ❌ -> {e}")
+            except:
+                print(f"cogs.{file[:-3]} ({file}) ❌ -> {traceback.format_exc()}")
 
     print("------------------------------------")
 
