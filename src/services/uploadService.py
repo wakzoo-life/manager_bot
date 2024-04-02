@@ -9,7 +9,7 @@ from discord import Attachment
 from PIL import Image
 from synology_api import filestation
 
-from src.plugins import sheet, filestation
+from plugins import sheet, filestation
 
 
 class UploadType(Enum):

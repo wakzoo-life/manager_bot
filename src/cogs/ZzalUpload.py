@@ -3,7 +3,7 @@ import os
 from discord import Message, Interaction, app_commands
 from discord.ext import commands
 
-from src.services import uploadService
+from services import uploadService
 
 
 class ZzalUpload(commands.GroupCog, name="업로드"):
@@ -25,7 +25,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
             [
                 uploaded,
                 errors,
-            ] = await self.uploadService.upload(uploadService.UploadType.ZZAL, message.content, message.attachments)
+            ] = await self.uploadService.upload(upload_type, message.content, message.attachments)
 
             if uploaded > 0:
                 if uploaded == 1:
@@ -98,3 +98,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
         else:
             await interaction.response.defer(thinking=True)
             self._upload(interaction, message, uploadService.UploadType.DICT)
+
+
+async def setup(bot: commands.Bot):
+    await bot.add_cog(ZzalUpload(bot))
