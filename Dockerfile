@@ -1,13 +1,12 @@
 # Run
-FROM python:3.12-alpine
-WORKDIR /usr/app
-
+FROM python:3.12-slim
 LABEL org.opencontainers.image.source https://github.com/kms0219kms/waklife_manager
 
-COPY ./requirements.txt .
+WORKDIR /usr/app
+RUN apt update && apt install curl tar xz-utils git -y
+RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
-RUN apk --no-cache add tzdata && ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
-RUN python3 -m pip install -U pip setuptools
+COPY requirements.txt .
 RUN python3 -m pip install -r /usr/app/requirements.txt
 
 COPY . .
