@@ -59,7 +59,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
             await interaction.response.send_message(":warning: 짤 이름은 한 줄로 입력해 주세요.", ephemeral=True)
         else:
             await interaction.response.defer(thinking=True)
-            self._upload(interaction, message, uploadService.UploadType.ZZAL)
+            await self._upload(interaction, message, uploadService.UploadType.ZZAL)
 
     async def upload_time(self, interaction: Interaction, message: Message) -> None:
         if len(message.attachments) <= 0:
@@ -78,7 +78,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
             await interaction.response.send_message(":warning: 시간 이름은 한 줄로 입력해 주세요.", ephemeral=True)
         else:
             await interaction.response.defer(thinking=True)
-            self._upload(interaction, message, uploadService.UploadType.TIME)
+            await self._upload(interaction, message, uploadService.UploadType.TIME)
 
     async def upload_dict(self, interaction: Interaction, message: Message) -> None:
         if len(message.attachments) <= 0:
@@ -97,7 +97,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
             await interaction.response.send_message(":warning: 단어 이름은 한 줄로 입력해 주세요.", ephemeral=True)
         else:
             await interaction.response.defer(thinking=True)
-            self._upload(interaction, message, uploadService.UploadType.DICT)
+            await self._upload(interaction, message, uploadService.UploadType.DICT)
 
 
 async def setup(bot: commands.Bot):
