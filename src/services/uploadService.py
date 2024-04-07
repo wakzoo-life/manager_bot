@@ -23,7 +23,7 @@ class UploadService:
         self.google_util = sheet.SheetPlugin()
         self.nasStation = filestation.FileStationPlugin().getFileStation()
 
-    async def upload(self, type: UploadType, message: str, files: List[Attachment]) -> tuple[int, List[str]]:
+    async def upload(self, type: UploadType, message: str, files: List[Attachment]) -> tuple[int, str]:
         worksheet = self.google_util.get_worksheet_by_index(
             key="1hfW3FTo9cjuMW9Kxvfnrbc6p_HyEnyYeA38mKM7nrOE", index=type
         )
@@ -138,11 +138,11 @@ class UploadService:
 
         if uploaded > 0:
             if uploaded == 1:
-                return (1, [])
+                return (1, "")
 
             if len(errors) >= 1:
                 return (uploaded, chr(10).join(errors))
             else:
-                return (uploaded, [])
+                return (uploaded, "")
         else:
             raise Exception(f"업로드 중 문제가 발생했습니다.")
