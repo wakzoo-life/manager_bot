@@ -56,6 +56,8 @@ class UploadService:
                 message.content.split("time: ")[1] if type == UploadType.TIME else message.content.split("name: ")[1]
             )
 
+            row = resv_zzal_names.index(zzal_name)
+
             member_dict_name = (
                 (
                     worksheet_data[row]
@@ -92,8 +94,6 @@ class UploadService:
                 .replace("'", "_")
                 .replace('"', "_")
             )
-
-            row = resv_zzal_names.index(zzal_name)
 
             await file.save(join("temp/", f"{message.author.id}_{filename}"))
 
