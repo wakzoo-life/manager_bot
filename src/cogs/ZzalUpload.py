@@ -24,7 +24,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
         try:
             [
                 uploaded,
-                errors,
+                error,
             ] = await self.uploadService.upload(upload_type, message.content, message.attachments)
 
             if uploaded > 0:
@@ -35,8 +35,8 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
                         f":tada: {len(message.attachments)}개 중 {uploaded}개 파일을 업로드하는데 성공했습니다."
                     )
 
-                    if len(errors) >= 1:
-                        multiple_msg += f"\n\n{chr(10).join(errors)}"
+                    if error != "":
+                        multiple_msg += f"\n\n{error}"
 
                     await interaction.edit_original_response(content=multiple_msg)
             else:
