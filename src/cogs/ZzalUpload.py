@@ -26,7 +26,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
             [
                 uploaded,
                 error,
-            ] = await self.uploadService.upload(upload_type, message.content, message.attachments)
+            ] = await self.uploadService.upload(upload_type, message)
 
             if uploaded > 0:
                 if uploaded == 1:

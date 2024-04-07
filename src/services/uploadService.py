@@ -5,7 +5,7 @@ from os.path import join
 from enum import Enum
 from typing import List
 
-from discord import Attachment
+from discord import Attachment, Message
 from PIL import Image
 from synology_api import filestation
 
@@ -23,7 +23,7 @@ class UploadService:
         self.google_util = sheet.SheetPlugin()
         self.nasStation = filestation.FileStationPlugin().getFileStation()
 
-    async def upload(self, type: UploadType, message: str, files: List[Attachment]) -> tuple[int, str]:
+    async def upload(self, type: UploadType, message: Message) -> tuple[int, str]:
         worksheet = self.google_util.get_worksheet_by_index(
             key="1hfW3FTo9cjuMW9Kxvfnrbc6p_HyEnyYeA38mKM7nrOE", index=type.value
         )
@@ -34,7 +34,7 @@ class UploadService:
         uploaded = 0
         errors = []
 
-        for file in files:
+        for file in message.attachments:
             filename = file.filename
 
             if not (
@@ -46,7 +46,7 @@ class UploadService:
             ):
                 _error_msg = f"`{filename}` 파일은 지원하지 않는 형식입니다."
 
-                if len(files) == 1:
+                if len(message.attachments) == 1:
                     raise Exception(_error_msg)
                 else:
                     errors.append(_error_msg)
@@ -76,7 +76,7 @@ class UploadService:
             if not zzal_name in resv_zzal_names:
                 _error_msg = f"`{zzal_name}` 시트에 등록되지 않은 짤 이름입니다. 등록 후 다시 시도해 주세요."
 
-                if len(files) == 1:
+                if len(message.attachments) == 1:
                     raise Exception(_error_msg)
                 else:
                     errors.append(_error_msg)
@@ -125,7 +125,7 @@ class UploadService:
             else:
                 _error_msg = f"업로드 중 문제가 발생했습니다.\n\n{uploadRes}"
 
-                if len(files) == 1:
+                if len(message.attachments) == 1:
                     raise Exception(_error_msg)
                 else:
                     errors.append(_error_msg)
