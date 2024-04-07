@@ -28,7 +28,7 @@ class UploadService:
             key="1hfW3FTo9cjuMW9Kxvfnrbc6p_HyEnyYeA38mKM7nrOE", index=type.value
         )
 
-        worksheet_data = worksheet.get_all_records(empty2zero=True, head=2 if type == UploadType.DICT else 1)
+        worksheet_data = worksheet.get_all_records(empty2zero=True)
         resv_zzal_names = [x.get("이름") for x in worksheet_data]
 
         uploaded = 0
