@@ -25,7 +25,7 @@ class UploadService:
 
     async def upload(self, type: UploadType, message: str, files: List[Attachment]) -> tuple[int, str]:
         worksheet = self.google_util.get_worksheet_by_index(
-            key="1hfW3FTo9cjuMW9Kxvfnrbc6p_HyEnyYeA38mKM7nrOE", index=type
+            key="1hfW3FTo9cjuMW9Kxvfnrbc6p_HyEnyYeA38mKM7nrOE", index=type.value
         )
 
         worksheet_data = worksheet.get_all_records(empty2zero=True, head=2 if type == UploadType.DICT else 1)
