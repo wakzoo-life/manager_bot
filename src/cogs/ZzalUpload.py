@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from discord import Message, Interaction, app_commands
 from discord.ext import commands
@@ -42,6 +43,7 @@ class ZzalUpload(commands.GroupCog, name="업로드"):
             else:
                 await interaction.edit_original_response(content=f":warning: 업로드 중 문제가 발생했습니다.")
         except Exception as e:
+            traceback.print_exc()
             await interaction.edit_original_response(content=f":warning: {e}")
 
     async def upload_zzal(self, interaction: Interaction, message: Message) -> None:
