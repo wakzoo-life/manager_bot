@@ -100,7 +100,7 @@ class UploadService:
             if filename.endswith(".jpg") or filename.endswith(".png"):
                 converted_image = Image.open(join("temp/", f"{message.author.id}_{filename}"))
                 converted_image.save(
-                    join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|png)$', '.webp', filename)}"), "webp"
+                    join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"), "webp"
                 )
                 converted_image.close()
 
@@ -116,7 +116,7 @@ class UploadService:
 
             uploadRes = self.nasStation.upload_file(
                 dest_path=upload_dest_path,
-                file_path=join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|png)$', '.webp', filename)}"),
+                file_path=join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"),
                 overwrite=True,
             )
 
