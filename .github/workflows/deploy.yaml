@@ -8,7 +8,7 @@ on:
   workflow_call:
 
 env:
-  IMAGE_NAME: waklife_manager
+  IMAGE_NAME: manager_bot
 
 jobs:
   push:
