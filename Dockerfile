@@ -1,6 +1,6 @@
 # Run
 FROM python:3.12-slim
-LABEL org.opencontainers.image.source https://github.com/kms0219kms/waklife_manager
+LABEL org.opencontainers.image.source https://github.com/wakzoo-life/manager_bot
 
 WORKDIR /usr/app
 RUN apt update && apt install curl tar xz-utils git -y

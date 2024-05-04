@@ -3,9 +3,8 @@ import re
 from os.path import join
 
 from enum import Enum
-from typing import List
 
-from discord import Attachment, Message
+from discord import Message
 from PIL import Image
 from synology_api import filestation
 
@@ -34,7 +33,7 @@ class UploadService:
         # 짤 이름만 골라서 Get
         resv_zzal_names = [x.get("이름") for x in worksheet_data]
 
-        uploaded = 0
+        uploaded = []
         errors = []
 
         for file in message.attachments:
@@ -134,7 +133,20 @@ class UploadService:
             )
 
             if uploadRes == "Upload Complete":
-                uploaded += 1
+                if type != UploadType.DICT:
+                    paths = [
+                        x
+                        for x in str(worksheet_data[row].get("업로더")).split(",")
+                        if x != "0" and x != "" and x != None
+                    ]
+                    paths.append(message.author.display_name)
+
+                    uploaded.append(
+                        {
+                            "range": "E" + str(row + 2),
+                            "values": [[",".join(paths)]],
+                        }
+                    )
             else:
                 _error_msg = f"업로드 중 문제가 발생했습니다.\n\n{uploadRes}"
 
@@ -150,13 +162,15 @@ class UploadService:
             if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
                 os.remove(join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"))
 
-        if uploaded > 0:
-            if uploaded == 1:
+        if len(uploaded) > 0:
+            worksheet.batch_update(uploaded)
+
+            if len(uploaded) == 1:
                 return (1, "")
 
             if len(errors) >= 1:
-                return (uploaded, chr(10).join(errors))
+                return (len(uploaded), chr(10).join(errors))
             else:
-                return (uploaded, "")
+                return (len(uploaded), "")
         else:
             raise Exception(f"업로드 중 문제가 발생했습니다.")
