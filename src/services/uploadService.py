@@ -37,6 +37,9 @@ class UploadService:
         errors = []
 
         for file in message.attachments:
+            # 2024-08-19 FIX: 파일명 중복으로 사진 업로드 누락 문제 수정
+            fileid = file.id
+
             # 2024-04-09 FIX: 대문자 확장자에서 오류 나는 문제 수정
             filename = file.filename.lower()
 
@@ -104,13 +107,13 @@ class UploadService:
             )
 
             # 임시 폴더에 저장
-            await file.save(join("temp/", f"{message.author.id}_{filename}"))
+            await file.save(join("temp/", f"{message.author.id}_{fileid}_{filename}"))
 
             # 파일이 jpg/jpeg/png라면
             if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
-                converted_image = Image.open(join("temp/", f"{message.author.id}_{filename}"))
+                converted_image = Image.open(join("temp/", f"{message.author.id}_{fileid}_{filename}"))
                 converted_image.save(
-                    join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"), "webp"
+                    join("temp/", f"{message.author.id}_{fileid}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"), "webp"
                 )
                 converted_image.close()
 
@@ -128,7 +131,7 @@ class UploadService:
             # 업로드 처리
             uploadRes = self.nasStation.upload_file(
                 dest_path=upload_dest_path,
-                file_path=join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"),
+                file_path=join("temp/", f"{message.author.id}_{fileid}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"),
                 overwrite=True,
             )
 
@@ -157,10 +160,10 @@ class UploadService:
                     continue
 
             # 임시 파일 정리
-            os.remove(join("temp/", f"{message.author.id}_{filename}"))
+            os.remove(join("temp/", f"{message.author.id}_{fileid}_{filename}"))
 
             if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
-                os.remove(join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"))
+                os.remove(join("temp/", f"{message.author.id}_{fileid}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"))
 
         if len(uploaded) > 0:
             worksheet.batch_update(uploaded)
