@@ -107,12 +107,12 @@ class UploadService:
             await file.save(join("temp/", f"{message.author.id}_{filename}"))
 
             # 파일이 jpg/jpeg/png라면
+            new_filename = re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)
+            final_filepath = join("temp/", f"{message.author.id}_{new_filename}")
+
             if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
-                converted_image = Image.open(join("temp/", f"{message.author.id}_{filename}"))
-                converted_image.save(
-                    join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"), "webp"
-                )
-                converted_image.close()
+                with Image.open(join("temp/", f"{message.author.id}_{filename}")) as i:
+                    i.save(final_filepath, "webp")
 
             # 업로드할 폴더 지정
             upload_dest_path = (
@@ -128,23 +128,19 @@ class UploadService:
             # 업로드 처리
             uploadRes = self.nasStation.upload_file(
                 dest_path=upload_dest_path,
-                file_path=join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"),
+                file_path=final_filepath,
                 overwrite=True,
             )
 
             if uploadRes == "Upload Complete":
                 if type != UploadType.DICT:
-                    paths = [
-                        x
-                        for x in str(worksheet_data[row].get("업로더")).split(",")
-                        if x != "0" and x != "" and x != None
-                    ]
+                    paths = list(filter(lambda x: x not in ["0", "", None], str(worksheet_data[row].get("업로더")).split(",")))
                     paths.append(message.author.display_name)
 
                     uploaded.append(
                         {
                             "range": "E" + str(row + 2),
-                            "values": [[",".join(paths)]],
+                            "values": [[",".join(list(set(paths)))]],
                         }
                     )
             else:
@@ -157,10 +153,10 @@ class UploadService:
                     continue
 
             # 임시 파일 정리
-            os.remove(join("temp/", f"{message.author.id}_{filename}"))
+            os.remove(join("temp/", f"{message.author.id}_{filename}")) # 원본 파일 삭제
 
             if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
-                os.remove(join("temp/", f"{message.author.id}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"))
+                os.remove(final_filepath) # webp 파일 삭제
 
         if len(uploaded) > 0:
             worksheet.batch_update(uploaded)

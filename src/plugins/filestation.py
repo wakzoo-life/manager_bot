@@ -12,7 +12,7 @@ def getSynologyHost() -> dict:
         "port": host.split("@")[1].split(":")[1],
         "username": host.split("//")[1].split(":")[0],
         "password": host.split("//")[1].split(":")[1].split("@")[0],
-        "secure": getenv("MODE").upper() != "PRODUCTION",
+        "secure": False,
         "cert_verify": False,
         "dsm_version": 7,
         "debug": True,
@@ -33,7 +33,7 @@ class FileStationPlugin:
             secure=host["secure"] or False,
             cert_verify=host["cert_verify"] or False,
             dsm_version=host["dsm_version"] or 7,
-            debug=host["debug"] or False,
+            debug=host["debug"] or True,
         )
 
     def getFileStation(self) -> FileStation:

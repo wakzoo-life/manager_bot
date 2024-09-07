@@ -4,10 +4,14 @@
 
 ```sh
 # Windows
-py -3 -m pip install -r requirements.txt
+py -3 -m venv .venv/ # virtualenv 추가 (python3.12+ requirement)
+./.venv/Scripts/Activate.ps1
+
+pip install -r requirements.txt
 
 # Linux, Mac
-python3 -m pip install -r requirements.txt
-```
+python3 -m venv .venv/
+source ./.venv/bin/activate
 
-<!--- test--->
+pip install -r requirements.txt
+```
