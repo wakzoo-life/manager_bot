@@ -176,4 +176,7 @@ class UploadService:
             else:
                 return (len(uploaded), "")
         else:
-            raise Exception(f"업로드 중 문제가 발생했습니다.")
+            if len(errors) >= 1:
+                raise Exception(_error_msg)
+            else:
+                raise Exception(f"업로드 중 문제가 발생했습니다.")
