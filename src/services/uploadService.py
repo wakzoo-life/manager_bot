@@ -1,11 +1,9 @@
 import os
-import re
 from os.path import join
 
 from enum import Enum
 
 from discord import Message
-from PIL import Image
 from synology_api import filestation
 
 from plugins import sheet, filestation
@@ -21,6 +19,19 @@ class UploadService:
     def __init__(self):
         self.google_util = sheet.SheetPlugin()
         self.nasStation = filestation.FileStationPlugin().getFileStation()
+
+    @staticmethod
+    def format_filename(filename: str) -> str:
+        return (
+            filename.replace(" ", "_")
+            .replace(":", "_")
+            .replace("?", "_")
+            .replace("!", "_")
+            .replace(".", "_")
+            .replace(",", "_")
+            .replace("'", "_")
+            .replace('"', "_")
+        )
 
     async def upload(self, type: UploadType, message: Message) -> tuple[int, str]:
         # 데이터 시트 Open
@@ -78,44 +89,14 @@ class UploadService:
 
             # ~~시 - 인물 이름 Formatting
             member_dict_name = (
-                (
-                    worksheet_data[row]
-                    .get("인물")
-                    .replace(" ", "_")
-                    .replace(":", "_")
-                    .replace("?", "_")
-                    .replace("!", "_")
-                    .replace(".", "_")
-                    .replace(",", "_")
-                    .replace("'", "_")
-                    .replace('"', "_")
-                )
-                if type == UploadType.TIME
-                else None
+                self.format_filename(worksheet_data[row].get("인물")) if type == UploadType.TIME else None
             )
 
             # 짤 이미지 이름 Formatting
-            zzal_dict_name = (
-                zzal_name.replace(" ", "_")
-                .replace(":", "_")
-                .replace("?", "_")
-                .replace("!", "_")
-                .replace(".", "_")
-                .replace(",", "_")
-                .replace("'", "_")
-                .replace('"', "_")
-            )
+            zzal_dict_name = self.format_filename(zzal_name.replace(" ", "_"))
 
             # 임시 폴더에 저장
             await file.save(join("temp/", f"{message.author.id}_{fileid}_{filename}"))
-
-            # 파일이 jpg/jpeg/png라면
-            if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
-                converted_image = Image.open(join("temp/", f"{message.author.id}_{fileid}_{filename}"))
-                converted_image.save(
-                    join("temp/", f"{message.author.id}_{fileid}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"), "webp"
-                )
-                converted_image.close()
 
             # 업로드할 폴더 지정
             upload_dest_path = (
@@ -131,7 +112,7 @@ class UploadService:
             # 업로드 처리
             uploadRes = self.nasStation.upload_file(
                 dest_path=upload_dest_path,
-                file_path=join("temp/", f"{message.author.id}_{fileid}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"),
+                file_path=join("temp/", f"{message.author.id}_{fileid}_{filename}"),
                 overwrite=True,
             )
 
@@ -142,7 +123,10 @@ class UploadService:
                         for x in str(worksheet_data[row].get("업로더")).split(",")
                         if x != "0" and x != "" and x != None
                     ]
-                    paths.append(message.author.display_name)
+                    try:
+                        paths.append(message.author.display_name.split(" ]")[1].replace("🏳 "))
+                    except IndexError:
+                        paths.append(message.author.display_name.replace("🏳 "))
 
                     uploaded.append(
                         {
@@ -161,9 +145,6 @@ class UploadService:
 
             # 임시 파일 정리
             os.remove(join("temp/", f"{message.author.id}_{fileid}_{filename}"))
-
-            if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png"):
-                os.remove(join("temp/", f"{message.author.id}_{fileid}_{re.sub(r'\.(jpg|jpeg|png)$', '.webp', filename)}"))
 
         if len(uploaded) > 0:
             worksheet.batch_update(uploaded)
