@@ -124,9 +124,9 @@ class UploadService:
                         if x != "0" and x != "" and x != None
                     ]
                     try:
-                        paths.append(message.author.display_name.split(" ]")[1].replace("🏳 "))
+                        paths.append(message.author.display_name.split(" ]")[1].replace("🏳 ", ""))
                     except IndexError:
-                        paths.append(message.author.display_name.replace("🏳 "))
+                        paths.append(message.author.display_name.replace("🏳 ", ""))
 
                     uploaded.append(
                         {
